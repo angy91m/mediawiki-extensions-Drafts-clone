@@ -6,9 +6,9 @@
  * @ingroup Extensions
  */
 
-class SpecialDrafts extends SpecialPage {
+class SpecialDraftsToApprove extends SpecialPage {
 	public function __construct() {
-		parent::__construct( 'Drafts' );
+		parent::__construct( 'DraftsToApprove' );
 	}
 
 	public function doesWrites() {
@@ -33,36 +33,20 @@ class SpecialDrafts extends SpecialPage {
 
 		// Make sure the user is logged in
 		$this->requireLogin();
+        if (!$user->isAllowed('drafts-approve')) {
+			$out->addWikiMsg("drafts-view-approve-permissions-error");
+            return;
+        }
 
 		// Handle discarding
-		$draft = Draft::newFromID( $request->getInt( 'discard', 0 ) );
+		$draft = Draft::newFromID( $request->getInt( 'refuse', 0 ) );
 		if ( $draft->exists() ) {
 			// Discard draft
-			$draft->discard();
-			// Redirect to the article editor or view if returnto was set
-			$section = $request->getIntOrNull( 'section' );
-			$urlSection = $section !== null ? "?section={$section}" : '';
-			switch ( $request->getText( 'returnto' ) ) {
-				case 'edit':
-					$title = Title::newFromDBKey( $draft->getTitle() );
-					$out->redirect(
-						wfExpandURL( $title->getEditURL() . $urlSection )
-					);
-					break;
-				case 'view':
-					$title = Title::newFromDBKey( $draft->getTitle() );
-					$out->redirect(
-						wfExpandURL( $title->getFullURL() . $urlSection )
-					);
-					break;
-			}
+			$draft->refuse();
+			$out->redirect(SpecialPage::getTitleFor( 'DraftsToApprove' )->getFullURL());
 		}
 
-		if ($request->getInt( 'proposed', 0 )) {
-			$out->addWikiTextAsInterface( 'Le tue modifiche sono in fase di verifica' );
-		}
-
-		$count = Drafts::num();
+		$count = Drafts::num(null, true, 'proposed');
 		if ( $count === 0 ) {
 			$out->addWikiMsg( 'drafts-view-nonesaved' );
 		} else {
@@ -74,7 +58,7 @@ class SpecialDrafts extends SpecialPage {
 					$this->getLanguage()->formatNum( $egDraftsLifeSpan )
 				]
 			);
-			$out->addHTML( Drafts::display() );
+			$out->addHTML( Drafts::display(null, true, 'proposed', true) );
 		}
 	}
 

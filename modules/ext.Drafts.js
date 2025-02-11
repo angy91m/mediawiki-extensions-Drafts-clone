@@ -1,5 +1,12 @@
 /* JavaScript for Drafts extension */
+var isDraftOwner = document.getElementById('drafts-approve-is-draft-owner');
+if (isDraftOwner) isDraftOwner = parseInt(isDraftOwner.value, 10);
+if (!isDraftOwner) {
+	document.getElementById('wpTextbox1').disabled = true;
+}
 
+const params = (new URL(location)).searchParams;
+document.getElementById('editform').action += '?'+ params.toString();
 var wgDraft;
 
 function Draft() {
@@ -122,34 +129,35 @@ function Draft() {
 	this.change = function () {
 		// Sets state to changed
 		self.setState( 'changed' );
-
-		// Checks if timer is pending and if we want to wait for user input
-		if ( !configuration.autoSaveBasedOnInput ) {
-			if ( timer ) {
+		if (isDraftOwner) {
+			// Checks if timer is pending and if we want to wait for user input
+			if ( !configuration.autoSaveBasedOnInput ) {
+				if ( timer ) {
+					return;
+				}
+	
+				if ( configuration.autoSaveWait && configuration.autoSaveWait > 0 ) {
+					// Sets timer to save automatically after a period of time
+					timer = setTimeout(
+						'wgDraft.save();', configuration.autoSaveWait * 1000
+					);
+				}
+	
 				return;
 			}
-
+	
+			if ( timer ) {
+				// Clears pending timer
+				clearTimeout( timer );
+			}
+	
+			// Checks if auto-save wait time was set, and that it's greater than 0
 			if ( configuration.autoSaveWait && configuration.autoSaveWait > 0 ) {
 				// Sets timer to save automatically after a period of time
 				timer = setTimeout(
 					'wgDraft.save();', configuration.autoSaveWait * 1000
 				);
 			}
-
-			return;
-		}
-
-		if ( timer ) {
-			// Clears pending timer
-			clearTimeout( timer );
-		}
-
-		// Checks if auto-save wait time was set, and that it's greater than 0
-		if ( configuration.autoSaveWait && configuration.autoSaveWait > 0 ) {
-			// Sets timer to save automatically after a period of time
-			timer = setTimeout(
-				'wgDraft.save();', configuration.autoSaveWait * 1000
-			);
 		}
 	};
 
@@ -188,18 +196,21 @@ function Draft() {
 				event.preventDefault();
 				// Fetch draft information from the server, including but certainly
 				// not limited to just its text
+				let draftId = jQuery( this ).data( 'draft-id' );
 				( new mediaWiki.Api() ).postWithEditToken( {
 					action: 'loaddrafts',
-					id: jQuery( this ).data( 'draft-id' ),
+					id: draftId,
 					formatversion: 2
 				} ).done( function ( response ) {
 					var draftData = response.loaddrafts;
+					jQuery( form.wpDraftID ).val( draftId );
 					jQuery( form.wpTextbox1 ).val( draftData.text );
 					jQuery( form.wpSummary ).val( draftData.summary );
 					jQuery( form.wpScrolltop ).val( draftData.scrolltop );
 					if ( draftData.minoredit ) {
 						jQuery( form.wpMinoredit ).prop( 'checked', draftData.minoredit );
 					}
+					jQuery('#wpDraftPropose').prop('disabled', draftData.status == 'proposed');
 				} );
 			} );
 
@@ -233,7 +244,7 @@ function Draft() {
 			self.setState( 'saved' );
 			// Gets id of newly inserted draft (or updates if it already exists)
 			// and stores it in a hidden form field
-			form.wpDraftID.value = data.savedrafts.id;
+			jQuery(form.wpDraftID).val( data.savedrafts.id );
 		} else {
 			// Changes state to error
 			self.setState( 'error' );

@@ -25,10 +25,12 @@ class ApiLoadDrafts extends ApiBase {
 
 		// Don't let users load others' drafts, only their own
 		if ( $draft->getUserID() !== $user->getId() ) {
-			$this->dieWithError(
-				'apierror-must-be-draft-owner',
-				'notowner'
-			);
+			if (!$user->isAllowed('drafts-approve') || $draft->getStatus() !== 'proposed') {
+				$this->dieWithError(
+					'apierror-must-be-draft-owner',
+					'notowner'
+				);
+			}
 		}
 
 		if ( !$draft->exists() ) {
@@ -47,7 +49,8 @@ class ApiLoadDrafts extends ApiBase {
 				'text' => $draft->getText(),
 				'summary' => $draft->getSummary(),
 				'scrolltop' => $draft->getScrollTop(),
-				'minoredit' => $draft->getMinorEdit() ? true : false
+				'minoredit' => $draft->getMinorEdit() ? true : false,
+				'status' => $draft->getStatus()
 			]
 		);
 	}

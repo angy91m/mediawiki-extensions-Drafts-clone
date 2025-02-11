@@ -8,6 +8,7 @@
 		]
 	},
 	"drafts": "Bozze",
+	"draftstoapprove": "Bozze da approvare",
 	"drafts-desc": "Aggiunge la possibilità di salvare versioni di [[Special:Drafts|bozza]] di una pagina sul server",
 	"drafts-view": "VisualizzaBozza",
 	"drafts-view-summary": "Questa pagina speciale mostra un elenco delle bozze esistenti. Le bozze non usate verranno cancellate automaticamente dopo {{PLURAL:$1|$1 giorno|$1 giorni}}.",
@@ -15,6 +16,14 @@
 	"drafts-view-existing": "Bozze esistenti",
 	"drafts-view-saved": "Salvata",
 	"drafts-view-discard": "Scarta",
+	"drafts-view-refuse": "Rifiuta",
+	"drafts-view-propose": "Proponi",
+	"drafts-view-approve": "Approva",
+	"drafts-view-status": "Stato",
+	"drafts-view-status-refused": "Rifiutata",
+	"drafts-view-status-proposed": "Proposta",
+	"drafts-view-status-approved": "Approvata",
+	"drafts-view-status-editing": "In modifica",
 	"drafts-view-nonesaved": "Non hai alcuna bozza salvata al momento.",
 	"drafts-view-notice": "Hai $1 per questa pagina.",
 	"drafts-view-notice-link": "$1 {{PLURAL:$1|bozza|bozze}}",
@@ -24,6 +33,7 @@
 	"drafts-save-saved": "Salvata",
 	"drafts-save-saving": "Salvataggio",
 	"drafts-save-error": "Errore nel salvataggio della bozza",
+	"drafts-page-save-error": "Errore nel salvataggio della pagina",
 	"drafts-enable": "Abilita la funzione per salvare una bozza nel modulo di modifica",
 	"prefs-extension-drafts": "Bozze",
 	"tooltip-drafts-save": "Salva come bozza",
@@ -39,7 +49,11 @@
 	"apihelp-savedrafts-param-text": "Testo della bozza.",
 	"apihelp-savedrafts-param-summary": "Riassunto della bozza.",
 	"apihelp-savedrafts-param-minoredit": "Booleano che specifica se la bozza è una modifica minore.",
+	"apierror-savedrafts-status-proposed": "Non puoi modificare una bozza proposta",
 	"apierror-mustbeloggedin-load-drafts": "Devi aver effettuato l'accesso per caricare le bozze.",
 	"apihelp-loaddrafts-summary": "Carica una bozza salvata in precedenza.",
-	"apihelp-loaddrafts-param-id": "L'ID della bozza."
+	"apihelp-loaddrafts-param-id": "L'ID della bozza.",
+	"apierror-approvedrafts-permissions": "Non hai i permessi per pubblicare una pagina.",
+	"apierror-must-be-draft-owner": "Non puoi salvare una bozza non tua.",
+	"drafts-view-approve-permissions-error": "Non hai i permessi per visualizzare questa pagina."
 }

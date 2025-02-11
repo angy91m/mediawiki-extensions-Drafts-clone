@@ -11,6 +11,7 @@ $specialPageAliases = [];
 /** English (English) */
 $specialPageAliases['en'] = [
 	'Drafts' => [ 'Drafts' ],
+	'DraftsToApprove' => [ 'Drafts to approve' ]
 ];
 
 /** Afrikaans (Afrikaans) */
@@ -161,6 +162,7 @@ $specialPageAliases['id'] = [
 /** Italian (italiano) */
 $specialPageAliases['it'] = [
 	'Drafts' => [ 'Bozze' ],
+	'DraftsToApprove' => [ 'Bozze da approvare' ],
 ];
 
 /** Japanese (日本語) */

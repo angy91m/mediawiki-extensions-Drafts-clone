@@ -1,11 +1,12 @@
 {
-	"name": "Drafts",
+	"name": "DraftsApprove",
 	"version": "0.3.7",
 	"author": [
 		"Trevor Parscal",
-		"Petr Bena"
+		"Petr Bena",
+		"angy91m"
 	],
-	"url": "https://www.mediawiki.org/wiki/Extension:Drafts",
+	"url": "https://github.com/angy91m/DraftsApprove.git",
 	"descriptionmsg": "drafts-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "other",
@@ -51,14 +52,16 @@
 		"Drafts": "includes/Drafts.php",
 		"Draft": "includes/Draft.php",
 		"DraftHooks": "includes/DraftHooks.php",
-		"SpecialDrafts": "includes/specials/SpecialDrafts.php"
+		"SpecialDrafts": "includes/specials/SpecialDrafts.php",
+		"SpecialDraftsToApprove": "includes/specials/SpecialDraftsToApprove.php"
 	},
 	"APIModules": {
 		"loaddrafts": "ApiLoadDrafts",
 		"savedrafts": "ApiSaveDrafts"
 	},
 	"SpecialPages": {
-		"Drafts": "SpecialDrafts"
+		"Drafts": "SpecialDrafts",
+		"DraftsToApprove": "SpecialDraftsToApprove"
 	},
 	"ExtensionMessagesFiles": {
 		"DraftsAlias": "Drafts.alias.php"
@@ -99,9 +102,16 @@
 		"SpecialMovepageAfterMove": "DraftHooks::onSpecialMovepageAfterMove",
 		"EditPageBeforeEditButtons": "DraftHooks::onEditPageBeforeEditButtons",
 		"EditPage::showEditForm:initial": "DraftHooks::loadForm",
+		"EditPage::attemptSave": "DraftHooks::onEditPage__attemptSave",
+		"VisualEditorApiVisualEditorEditPreSave": "DraftHooks::onVisualEditorApiVisualEditorEditPreSave",
 		"EditPage::attemptSave:after": "DraftHooks::onEditPage__attemptSave_after",
 		"ResourceLoaderGetConfigVars": "DraftHooks::onResourceLoaderGetConfigVars",
 		"LoadExtensionSchemaUpdates": "DraftHooks::schema"
+	},
+	"GroupPermissions": {
+		"sysop": {
+			"drafts-approve": true
+		}
 	},
 	"manifest_version": 2
 }
